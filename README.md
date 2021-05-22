@@ -1,2 +1,2 @@
 # GForm-maker
-A discord bot that creates Google form
+A discord bot that creates Google form.
