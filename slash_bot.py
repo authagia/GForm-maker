@@ -45,8 +45,29 @@ async def readTest(ctx,row , column):
                                      ['clasp','run','readTest','-p','['+str(row)+','+str(column)+']'],
 				     shell = False,
 				     cwd = './clasp/',
-                                    ).decode().split('1G')[1]
+                                    ).decode().split(':boundary:')[-1]
     print(result)
-    await ctx.send(str(result))
+    await ctx.send(result)
+
+@slash.slash(guild_ids=guild_id,
+             name='createForm',
+             description='create a Google form for attendance confirmation',
+             options=[
+                 create_option(
+                         name='forced',
+                         description="force ansering progress",
+                         option_type=5,
+                         required=False,
+                 ),
+             ],
+            )
+async def create(ctx,forced=False):
+    await ctx.defer()
+    result = subprocess.check_output(
+                                     ['clasp','run','formCreate'],
+                                     shell=False,
+                                     cwd="./clasp/",
+                                     ).decode().split(":boundary:")[-1]
+    await ctx.send(result)
 
 bot.run(token)

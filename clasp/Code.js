@@ -10,10 +10,10 @@ function readTest(r,c){
   if(!r&&!c){r=2;c=3}
   console.log(r+','+c)
   const ss = SpreadsheetApp.getActive();
-  const sheet = ss.getSheets()[0];
+  const sheet = ss.getSheets()[1];
   const values = sheet.getDataRange().getValues();
   if(r<values.length&&c<values[0].length){
-    return values[r][c];
+    return ":boundary:"+values[r][c];
   }else{
     return 'out of range!!'
   }
@@ -94,4 +94,6 @@ function formCreate() {
   // 1個目のページに表示させたいので2個目のページの前に設定する
   form.moveItem(firstPageListItem.getIndex(), secondPage.getIndex());
   form.moveItem(firshPageMaltipleChoiceItem.getIndex(),secondPage.getIndex());
+
+  return ":boundary:"+form.getPublishedUrl();
 }
