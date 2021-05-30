@@ -63,8 +63,9 @@ async def readTest(ctx,row , column):
             )
 async def create(ctx,forced=False):
     await ctx.defer()
+    bool = 'true' if forced else 'false'
     result = subprocess.check_output(
-                                     ['clasp','run','formCreate'],
+                                     ['clasp','run','formCreate','-p',bool],
                                      shell=False,
                                      cwd="./clasp/",
                                      ).decode().split(":boundary:")[-1]

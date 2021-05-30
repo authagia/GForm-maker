@@ -3,7 +3,7 @@ function myFunction() {
   const sheet = ss.getSheets()[0];
   const values = sheet.getDataRange().getValues();
   Logger.log(values);
-  return values  
+  return values
 }
 
 function readTest(r,c){
@@ -15,11 +15,11 @@ function readTest(r,c){
   if(r<values.length&&c<values[0].length){
     return ":boundary:"+values[r][c];
   }else{
-    return 'out of range!!'
+    return ':boundary:out of range!!'
   }
 }
 
-function formCreate() {
+function formCreate(forced=false) {
   const ss = SpreadsheetApp.getActive();
   const sheet = ss.getSheets()[0];
   const values = sheet.getDataRange().getValues();
@@ -34,9 +34,9 @@ function formCreate() {
   // 4個目のページの前に移動させる
   //form.moveItem(thirdPage.getIndex(), fourthPage.getIndex());
   const thirdPageTextItem = form.addParagraphTextItem();
-  thirdPageTextItem.setTitle(values[6][0]).setRequired(values[6][3]==1);
+  thirdPageTextItem.setTitle(values[6][0]).setRequired(values[6][3]==1||forced);
   const thirdPageScaleItem = form.addScaleItem();
-  thirdPageScaleItem.setTitle(values[7][0]).setRequired(values[7][3]==1);
+  thirdPageScaleItem.setTitle(values[7][0]).setRequired(values[7][3]==1||forced);
   const boundsarg = values[values[7][2]-1][1].split(',');
   const labelsarg = values[values[7][2]-1][2].split(',');
   thirdPageScaleItem.setBounds(...boundsarg);
@@ -94,6 +94,13 @@ function formCreate() {
   // 1個目のページに表示させたいので2個目のページの前に設定する
   form.moveItem(firstPageListItem.getIndex(), secondPage.getIndex());
   form.moveItem(firshPageMaltipleChoiceItem.getIndex(),secondPage.getIndex());
-
+  moveFormFile(form.getId());
   return ":boundary:"+form.getPublishedUrl();
+}
+
+function moveFormFile(formId){
+  const formfile = DriveApp.getFileById(formId);
+  const folder = DriveApp.getFoldersByName('Forms').next();//select the first found folder
+  folder.addFile(formfile);
+  DriveApp.removeFile(formfile);
 }
